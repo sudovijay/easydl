@@ -131,7 +131,16 @@ function followRedirect(address, opts, methodFallback) {
             else {
                 if (currentAddress !== address)
                     return { address: currentAddress };
-                throw new Error(`Got HTTP Response code ${statusCode}`);
+                const { headers, statusCode } = yield requestHeader(currentAddress, opts, true);
+                if (statusCode === 200 || statusCode === 206) {
+                    return {
+                        address: currentAddress,
+                        headers,
+                    };
+                }
+                else {
+                    throw new Error(`Got HTTP Response code ${statusCode}`);
+                }
             }
         }
     });
@@ -141,7 +150,11 @@ function requestHeader(address, options, methodFallback) {
     return __awaiter(this, void 0, void 0, function* () {
         const req = new Request(address, Object.assign(Object.assign({}, options), { headers: Object.assign(Object.assign({}, options === null || options === void 0 ? void 0 : options.headers), (methodFallback && { Range: "bytes=0-0" })), method: methodFallback ? "GET" : "HEAD" })).end();
         const res = yield Promise.race([
-            new Promise((res) => req.once("ready", res)),
+            new Promise((res) => req.once("ready", (data) => {
+                if (methodFallback)
+                    req.destroy();
+                res(data);
+            })),
             new Promise((res) => req.once("error", res)),
         ]);
         const code = res.statusCode;

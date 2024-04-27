@@ -1,11 +1,11 @@
 {
   "name": "easydl",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Easily download a file and save it to local disk. It supports resuming previously downloaded files, multi-connection/parallel downloads, and retry on fail out of the box!",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "demo": "npm run build && ts-node examples/buddy.ts",
+    "demo": "ts-node examples/demo.ts",
     "build": "tsc"
   },
   "author": "Andre Susanto <andre@susan.to>",

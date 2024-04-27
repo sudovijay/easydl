@@ -194,7 +194,21 @@ export async function followRedirect(
       currentAddress = headers.location;
     } else {
       if (currentAddress !== address) return { address: currentAddress };
-      throw new Error(`Got HTTP Response code ${statusCode}`);
+
+      const { headers, statusCode } = await requestHeader(
+        currentAddress,
+        opts,
+        true
+      );
+
+      if (statusCode === 200 || statusCode === 206) {
+        return {
+          address: currentAddress,
+          headers,
+        };
+      } else {
+        throw new Error(`Got HTTP Response code ${statusCode}`);
+      }
     }
   }
 }
@@ -214,7 +228,13 @@ export async function requestHeader(
   }).end();
 
   const res = await Promise.race([
-    new Promise<RequestReadyData>((res) => req.once("ready", res)),
+    new Promise<RequestReadyData>((res) =>
+      req.once("ready", (data) => {
+        if (methodFallback) req.destroy();
+
+        res(data);
+      })
+    ),
     new Promise<Error>((res) => req.once("error", res)),
   ]);
 

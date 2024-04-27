@@ -5,7 +5,13 @@
     "target": "es2015",
     "declaration": true,
     "strict": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "types": ["node"]
   },
-  "include": ["src/**/*"]
+
+  "include": ["src/**/*"],
+  "exclude": [
+    "node_modules/@types/node/util.d.ts",
+    "node_modules/@types/node/index.d.ts"
+  ]
 }

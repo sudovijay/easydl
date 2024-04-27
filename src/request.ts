@@ -129,7 +129,7 @@ class Request extends EventEmitter {
   }
 
   async wait(): Promise<boolean> {
-    await new Promise((res) => this.once("close", res));
+    await new Promise((res) => this.once("close" as unknown as "error", res));
     return this._end;
   }
 

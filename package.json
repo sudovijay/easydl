@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "examples": "npm run build && ts-node examples/index.ts",
+    "demo": "npm run build && ts-node examples/buddy.ts",
     "build": "tsc"
   },
   "author": "Andre Susanto <andre@susan.to>",
@@ -33,7 +33,7 @@
   ],
   "devDependencies": {
     "@types/node": "^20.12.7",
-    "ts-node": "^8.10.1",
-    "typescript": "^3.9.3"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
   }
 }
